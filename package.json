@@ -31,8 +31,7 @@
             },
             "electronPackagerConfig": {
                 "packageManager": "npm",
-                "icon": "src/assets/icon.ico",
-                "asar": "true"
+                "icon": "src/assets/icon.ico"
             },
             "electronWinstallerConfig": {
                 "name": "HordesIo",
