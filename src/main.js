@@ -2,37 +2,80 @@ const { app, session, screen, BrowserView, BrowserWindow, autoUpdater, dialog } 
 const path = require('path')
 const url = require('url')
 const fs = require('fs')
-require('update-electron-app')({
-    logger: require('electron-log')
-})
-
-/*
-const server = 'https://update.electronjs.org'
-const feed = `${server}/korvnisse/HordesIo-Client/${process.platform}-${process.arch}/${app.getVersion()}`
 if (require('electron-squirrel-startup')) app.quit();
 
-//installation event
+//Squirrel installation events
 if (handleSquirrelEvent()) {
-    // squirrel event handled and app will exit in 1000ms, so don't do anything else
     app.quit();
 }
 
-//Update function
-autoUpdater.setFeedURL(feed)
-autoUpdater.checkForUpdates()
+function handleSquirrelEvent() {
+    if (process.argv.length === 1) {
+        return false;
+    }
 
-setInterval(() => {
-    autoUpdater.checkForUpdates()
-}, 10 * 60 * 1000)
+    const ChildProcess = require('child_process');
+    const path = require('path');
 
-autoUpdater.on('update-available', () => {
-    win.webContents.webContents.executeJavaScript('document.getElementById("upd").innerHTML = "New version available.. Downloading"')
+    const appFolder = path.resolve(process.execPath, '..');
+    const rootAtomFolder = path.resolve(appFolder, '..');
+    const updateDotExe = path.resolve(path.join(rootAtomFolder, 'Update.exe'));
+    const exeName = path.basename(process.execPath);
+
+    const spawn = function(command, args) {
+        let spawnedProcess, error;
+
+        try {
+            spawnedProcess = ChildProcess.spawn(command, args, { detached: true });
+        } catch (error) {}
+
+        return spawnedProcess;
+    };
+
+    const spawnUpdate = function(args) {
+        return spawn(updateDotExe, args);
+    };
+
+    const squirrelEvent = process.argv[1];
+    switch (squirrelEvent) {
+        case '--squirrel-install':
+        case '--squirrel-updated':
+            // Optionally do things such as:
+            // - Add your .exe to the PATH
+            // - Write to the registry for things like file associations and
+            //   explorer context menus
+
+            // Install desktop and start menu shortcuts
+            spawnUpdate(['--createShortcut', exeName]);
+
+            setTimeout(app.quit, 1000);
+            return true;
+
+        case '--squirrel-uninstall':
+            // Undo anything you did in the --squirrel-install and
+            // --squirrel-updated handlers
+
+            // Remove desktop and start menu shortcuts
+            spawnUpdate(['--removeShortcut', exeName]);
+
+            setTimeout(app.quit, 1000);
+            return true;
+
+        case '--squirrel-obsolete':
+            // This is called on the outgoing version of your app before
+            // we update to the new version - it's the opposite of
+            // --squirrel-updated
+
+            app.quit();
+            return true;
+    }
+};
+
+
+//check for updates
+require('update-electron-app')({
+    logger: require('electron-log')
 })
-
-autoUpdater.on('update-downloaded', (event, releasteNotes, releaseName, releaseDate, updateURL) => {
-    win.webContents.webContents.executeJavaScript('document.getElementById("upd").innerHTML = "Client version ' + releaseName + ' Available. Restart to apply changes"')
-})
-*/
 
 function createWindow() {
 
@@ -97,7 +140,6 @@ function createWindow() {
     view.webContents.on('did-finish-load', () => {
         view.webContents.insertCSS('::-webkit-scrollbar {width: 0px;}');
         win.show();
-        win.webContents.webContents.executeJavaScript('document.getElementById("upd").innerHTML = "Client version X Available. Restart to apply changes"') //for testing auto-update
         load.hide();
     });
 
@@ -133,66 +175,3 @@ app.on('activate', () => {
         createWindow()
     }
 })
-
-//Squirrel installation events
-function handleSquirrelEvent() {
-    if (process.argv.length === 1) {
-        return false;
-    }
-
-    const ChildProcess = require('child_process');
-    const path = require('path');
-
-    const appFolder = path.resolve(process.execPath, '..');
-    const rootAtomFolder = path.resolve(appFolder, '..');
-    const updateDotExe = path.resolve(path.join(rootAtomFolder, 'Update.exe'));
-    const exeName = path.basename(process.execPath);
-
-    const spawn = function(command, args) {
-        let spawnedProcess, error;
-
-        try {
-            spawnedProcess = ChildProcess.spawn(command, args, { detached: true });
-        } catch (error) {}
-
-        return spawnedProcess;
-    };
-
-    const spawnUpdate = function(args) {
-        return spawn(updateDotExe, args);
-    };
-
-    const squirrelEvent = process.argv[1];
-    switch (squirrelEvent) {
-        case '--squirrel-install':
-        case '--squirrel-updated':
-            // Optionally do things such as:
-            // - Add your .exe to the PATH
-            // - Write to the registry for things like file associations and
-            //   explorer context menus
-
-            // Install desktop and start menu shortcuts
-            spawnUpdate(['--createShortcut', exeName]);
-
-            setTimeout(app.quit, 1000);
-            return true;
-
-        case '--squirrel-uninstall':
-            // Undo anything you did in the --squirrel-install and
-            // --squirrel-updated handlers
-
-            // Remove desktop and start menu shortcuts
-            spawnUpdate(['--removeShortcut', exeName]);
-
-            setTimeout(app.quit, 1000);
-            return true;
-
-        case '--squirrel-obsolete':
-            // This is called on the outgoing version of your app before
-            // we update to the new version - it's the opposite of
-            // --squirrel-updated
-
-            app.quit();
-            return true;
-    }
-};
