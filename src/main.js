@@ -7,7 +7,6 @@ require('update-electron-app')()
 
 require('update-electron-app')({
         repo: 'korvnisse/HordesIo-Client',
-        updateInterval: '1 hour',
     })
     //notify user of update
     //    win.webContents.webContents.executeJavaScript('document.getElementById("upd").innerHTML = "Client version ' + releaseName + ' Available. Restart to apply changes"')
