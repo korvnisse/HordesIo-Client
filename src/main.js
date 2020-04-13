@@ -2,6 +2,9 @@ const { app, session, screen, BrowserView, BrowserWindow, autoUpdater, dialog } 
 const path = require('path')
 const url = require('url')
 const fs = require('fs')
+const server = 'https://update.electronjs.org'
+const feed = `${server}/korvnisse/HordesIo-Client/${process.platform}/${app.getVersion()}`
+var win;
 if (require('electron-squirrel-startup')) app.quit();
 
 //Squirrel installation events
@@ -65,11 +68,35 @@ function handleSquirrelEvent() {
     }
 };
 
+//Better updater hopefully
+function update() {
+    autoUpdater.setFeedURL(feed)
+    autoUpdater.checkForUpdates()
 
-//check for updates
+    setInterval(() => {
+        autoUpdater.checkForUpdates()
+    }, 60000 * 10)
+
+    autoUpdater.on('checking-for-update', () => {
+        win.webContents.webContents.executeJavaScript('document.getElementById("upd").innerHTML = "Checking for update..."')
+        console.log("checking for update")
+    })
+    autoUpdater.on('update-available', () => {
+        win.webContents.webContents.executeJavaScript('document.getElementById("upd").innerHTML = "Downloading new version..."')
+    })
+    autoUpdater.on('update-not-available', () => {
+        win.webContents.webContents.executeJavaScript('document.getElementById("upd").innerHTML = "Latest version already!"')
+        setTimeout(function() { win.webContents.webContents.executeJavaScript('document.getElementById("upd").innerHTML = ""') }, 5000)
+    })
+    autoUpdater.on('update-downloaded', (event, releaseNotes, releaseName) => {
+        win.webContents.webContents.executeJavaScript('document.getElementById("upd").innerHTML = "Client version V.' + releaseName + '  Restart to apply changes"')
+    })
+};
+/*/check for updates - works like shit
 require('update-electron-app')({
     logger: require('electron-log')
 })
+*/
 
 function createWindow() {
 
@@ -92,7 +119,7 @@ function createWindow() {
 
 
     //Outer window
-    var win = new BrowserWindow({
+    win = new BrowserWindow({
         width: 805,
         height: 720,
         useContentSize: true,
@@ -156,7 +183,11 @@ function createWindow() {
     view.webContents.openDevTools() //-->Devtools for debugging<--
 }
 
-app.on('ready', createWindow)
+app.on('ready', () => {
+    createWindow();
+    setTimeout(function() { update(); }, 5000);
+})
+
 
 //macOS related window handling
 app.on('window-all-closed', () => {
