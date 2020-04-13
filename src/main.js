@@ -177,10 +177,10 @@ function createWindow() {
 
     //destroy win on close
     win.on('closed', () => {
-        view = null
-        win = null
-    })
-    view.webContents.openDevTools() //-->Devtools for debugging<--
+            view = null
+            win = null
+        })
+        //view.webContents.openDevTools() //-->Devtools for debugging<--
 }
 
 app.on('ready', () => {
