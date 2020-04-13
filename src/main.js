@@ -2,6 +2,11 @@ const { app, session, screen, BrowserView, BrowserWindow, autoUpdater, dialog } 
 const path = require('path')
 const url = require('url')
 const fs = require('fs')
+require('update-electron-app')({
+    logger: require('electron-log')
+})
+
+/*
 const server = 'https://update.electronjs.org'
 const feed = `${server}/korvnisse/HordesIo-Client/${process.platform}-${process.arch}/${app.getVersion()}`
 if (require('electron-squirrel-startup')) app.quit();
@@ -27,6 +32,7 @@ autoUpdater.on('update-available', () => {
 autoUpdater.on('update-downloaded', (event, releasteNotes, releaseName, releaseDate, updateURL) => {
     win.webContents.webContents.executeJavaScript('document.getElementById("upd").innerHTML = "Client version ' + releaseName + ' Available. Restart to apply changes"')
 })
+*/
 
 function createWindow() {
 
@@ -91,7 +97,7 @@ function createWindow() {
     view.webContents.on('did-finish-load', () => {
         view.webContents.insertCSS('::-webkit-scrollbar {width: 0px;}');
         win.show();
-        win.webContents.webContents.executeJavaScript('document.getElementById("upd").innerHTML = "Client version X Available. Restart to apply changes"') //for testing auto-update
+        //win.webContents.webContents.executeJavaScript('document.getElementById("upd").innerHTML = "Client version X Available. Restart to apply changes"') //for testing auto-update
         load.hide();
     });
 
