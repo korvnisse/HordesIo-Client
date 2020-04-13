@@ -1,7 +1,7 @@
 {
     "name": "hordes",
     "productName": "HordesIo",
-    "version": "0.1.3",
+    "version": "0.5.1",
     "description": "Horde.Io client",
     "repository": "https://github.com/korvnisse/HordesIo-Client",
     "main": "src/main.js",
