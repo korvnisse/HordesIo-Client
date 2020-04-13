@@ -3,7 +3,7 @@
     "productName": "HordesIo",
     "version": "0.1.0",
     "description": "Horde.Io client",
-	"repository": "https://github.com/korvnisse/Hordes.io-Electron",
+    "repository": "https://github.com/korvnisse/HordesIo-Client",
     "main": "src/main.js",
     "scripts": {
         "start": "electron-forge start",
@@ -30,16 +30,18 @@
                 ]
             },
             "electronPackagerConfig": {
-                "packageManager": "npm"
+                "packageManager": "npm",
+                "icon": "src/assets/icon.ico"
             },
             "electronWinstallerConfig": {
-                "name": "HordesIo"
+                "name": "HordesIo",
+                "setupIcon": "./assets/icon.ico"
             },
             "electronInstallerDebian": {},
             "electronInstallerRedhat": {},
             "github_repository": {
                 "owner": "korvnisse",
-                "name": "Hordes.io-Electron"
+                "name": "HordesIo-Client"
             },
             "windowsStoreConfig": {
                 "packageName": "",

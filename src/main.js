@@ -6,7 +6,7 @@ require('update-electron-app')()
 
 
 require('update-electron-app')({
-        repo: 'korvnisse/Hordes.io-Electron',
+        repo: 'korvnisse/HordesIo-Client',
         updateInterval: '1 hour',
     })
     //notify user of update
