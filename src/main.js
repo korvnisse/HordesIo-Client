@@ -46,7 +46,6 @@ function handleSquirrelEvent() {
 
             // Install desktop and start menu shortcuts
             spawnUpdate(['--createShortcut', exeName]);
-
             setTimeout(app.quit, 1000);
             return true;
 
@@ -54,33 +53,25 @@ function handleSquirrelEvent() {
 
             // Remove desktop and start menu shortcuts
             spawnUpdate(['--removeShortcut', exeName]);
-
             setTimeout(app.quit, 1000);
             return true;
 
         case '--squirrel-obsolete':
-            // This is called on the outgoing version of your app before
-            // we update to the new version -
+            // This is called on the outgoing version of your app before update
 
-            //Copy cookies here?
             app.quit();
             return true;
     }
 };
 
-//Better updater hopefully
+//Auto-update things
 function update() {
     autoUpdater.setFeedURL(feed)
-    autoUpdater.checkForUpdates()
 
     setInterval(() => {
         autoUpdater.checkForUpdates()
     }, 60000 * 10)
 
-    autoUpdater.on('checking-for-update', () => {
-        win.webContents.webContents.executeJavaScript('document.getElementById("upd").innerHTML = "Checking for update..."')
-        console.log("checking for update")
-    })
     autoUpdater.on('update-available', () => {
         win.webContents.webContents.executeJavaScript('document.getElementById("upd").innerHTML = "Downloading new version..."')
     })
@@ -92,11 +83,6 @@ function update() {
         win.webContents.webContents.executeJavaScript('document.getElementById("upd").innerHTML = "Client version V.' + releaseName + '  Restart to apply changes"')
     })
 };
-/*/check for updates - works like shit
-require('update-electron-app')({
-    logger: require('electron-log')
-})
-*/
 
 function createWindow() {
 
@@ -136,7 +122,7 @@ function createWindow() {
     }))
 
 
-    //Load and attach new BrowserView to to parent window
+    //Load and attach new BrowserView to outer window
     let view = new BrowserView
 
     win.setBrowserView(view)
@@ -175,12 +161,11 @@ function createWindow() {
         }
     })
 
-    //destroy win on close
+    //destroy windows on exit
     win.on('closed', () => {
-            view = null
-            win = null
-        })
-        //view.webContents.openDevTools() //-->Devtools for debugging<--
+        view = null
+        win = null
+    })
 }
 
 app.on('ready', () => {

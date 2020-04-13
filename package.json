@@ -1,7 +1,7 @@
 {
     "name": "hordes",
     "productName": "HordesIo",
-    "version": "0.5.3",
+    "version": "0.6.0",
     "description": "Horde.Io client",
     "repository": "https://github.com/korvnisse/HordesIo-Client",
     "main": "src/main.js",
@@ -31,7 +31,8 @@
             },
             "electronPackagerConfig": {
                 "packageManager": "npm",
-                "icon": "src/assets/icon.ico"
+                "icon": "src/assets/icon.ico",
+                "asar": "true"
             },
             "electronWinstallerConfig": {
                 "name": "HordesIo",
