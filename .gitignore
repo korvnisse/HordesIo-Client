@@ -1,0 +1,6 @@
+node_modules
+out
+.compilerc
+.eslintrc
+att göra.txt
+package-lock.json
