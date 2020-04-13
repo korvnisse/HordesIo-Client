@@ -81,6 +81,7 @@ function createWindow() {
     view.webContents.on('did-finish-load', () => {
         view.webContents.insertCSS('::-webkit-scrollbar {width: 0px;}');
         win.show();
+        win.webContents.webContents.executeJavaScript('document.getElementById("upd").innerHTML = "Client version X Available. Restart to apply changes"') //for testing auto-update
         load.hide();
     });
 
