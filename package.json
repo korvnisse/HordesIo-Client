@@ -52,6 +52,7 @@
     "dependencies": {
         "electron-compile": "^6.4.4",
         "electron-squirrel-startup": "^1.0.0",
+        "electron-updater": "^4.2.5",
         "update-electron-app": "^1.5.0"
     },
     "devDependencies": {

@@ -2,21 +2,31 @@ const { app, session, screen, BrowserView, BrowserWindow, autoUpdater, dialog } 
 const path = require('path')
 const url = require('url')
 const fs = require('fs')
-require('update-electron-app')()
-
+const server = 'https://update.electronjs.org'
+const feed = `${server}/korvnisse/HordesIo-Client/${process.platform}-${process.arch}/${app.getVersion()}`
 if (require('electron-squirrel-startup')) app.quit();
-
-require('update-electron-app')({
-        repo: 'korvnisse/HordesIo-Client'
-    })
-    //notify user of update
-    //    win.webContents.webContents.executeJavaScript('document.getElementById("upd").innerHTML = "Client version ' + releaseName + ' Available. Restart to apply changes"')
 
 //installation event
 if (handleSquirrelEvent()) {
     // squirrel event handled and app will exit in 1000ms, so don't do anything else
     app.quit();
 }
+
+//Update function
+autoUpdater.setFeedURL(feed)
+autoUpdater.checkForUpdates()
+
+setInterval(() => {
+    autoUpdater.checkForUpdates()
+}, 10 * 60 * 1000)
+
+autoUpdater.on('update-available', () => {
+    win.webContents.webContents.executeJavaScript('document.getElementById("upd").innerHTML = "New version available.. Downloading"')
+})
+
+autoUpdater.on('update-downloaded', (event, releasteNotes, releaseName, releaseDate, updateURL) => {
+    win.webContents.webContents.executeJavaScript('document.getElementById("upd").innerHTML = "Client version ' + releaseName + ' Available. Restart to apply changes"')
+})
 
 function createWindow() {
 
