@@ -4,14 +4,13 @@ const url = require('url')
 const fs = require('fs')
 require('update-electron-app')()
 
+if (require('electron-squirrel-startup')) app.quit();
 
 require('update-electron-app')({
-        repo: 'korvnisse/HordesIo-Client',
+        repo: 'korvnisse/HordesIo-Client'
     })
     //notify user of update
     //    win.webContents.webContents.executeJavaScript('document.getElementById("upd").innerHTML = "Client version ' + releaseName + ' Available. Restart to apply changes"')
-
-if (require('electron-squirrel-startup')) app.quit();
 
 //installation event
 if (handleSquirrelEvent()) {
