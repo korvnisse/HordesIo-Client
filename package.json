@@ -35,7 +35,7 @@
             },
             "electronWinstallerConfig": {
                 "name": "HordesIo",
-                "setupIcon": "./assets/icon.ico"
+                "setupIcon": "src/assets/icon.ico"
             },
             "electronInstallerDebian": {},
             "electronInstallerRedhat": {},
