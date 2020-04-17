@@ -19,7 +19,6 @@ html,
 body {
     height: 100%;
     width: 100%;
-    padding-right: 20px;
     margin: 0;
     overflow: scroll;
     overflow-x: hidden;
@@ -156,15 +155,6 @@ body {
     grid-column: 4;
 }
 
-#worldEdit {
-    color: #BBB;
-    background-color: rgba(255, 255, 255, 0);
-    margin-left: 600px;
-    position: absolute;
-    outline: none;
-    -webkit-app-region: no-drag;
-}
-
 #window-controls #close-btn:hover {
     background: #E81123;
 }
@@ -172,7 +162,6 @@ body {
 #main {
     height: calc(100% - 32px);
     margin-top: 32px;
-    padding: 20px;
     overflow-y: auto;
 }
 

@@ -3,7 +3,7 @@
     const remote = require('electron').remote;
     const app = require('electron').remote.app;
 
-    //Eventlisteners for outer buttons (min/max/close)
+    //Eventlisteners for window buttons (min/max/close)
     function init() {
         document.getElementById("min-btn").addEventListener("click", function(e) {
             const window = remote.getCurrentWindow();
