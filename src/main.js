@@ -1,6 +1,6 @@
 import { handleSquirrelEvent } from './squirrelInstall'
 
-const { app, autoUpdater, BrowserView, BrowserWindow } = require('electron')
+const { app, autoUpdater, BrowserView, BrowserWindow, screen } = require('electron')
 const path = require('path');
 const url = require('url');
 const fs = require('fs');
@@ -68,7 +68,6 @@ function createWindow() {
     win = new BrowserWindow({
         width: 805,
         height: 720,
-        transparent: true,
         useContentSize: true,
         show: false,
         frame: false,
@@ -117,10 +116,32 @@ function createWindow() {
             win.maximize();
         }
     });
+
+    //manually set browserview size on min/max. normal way is bugged
+    win.on('maximize', () => {
+        view.setBounds({
+            x: 0,
+            y: 32,
+            width: win.getContentBounds()['width'],
+            height: win.getContentBounds()['height'] - 32
+        })
+    });
+
+    win.on('unmaximize', () => {
+        view.setBounds({
+            x: 0,
+            y: 32,
+            width: win.getContentBounds()['width'],
+            height: win.getContentBounds()['height'] - 32
+        })
+    });
+
+    //remove windows on close
     win.on('closed', () => {
         view = null;
         win = null;
     });
+
 }
 
 //Main
